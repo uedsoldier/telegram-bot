@@ -1,15 +1,24 @@
 from telegram.ext import ApplicationBuilder, Application, CommandHandler, MessageHandler, filters, ContextTypes
 from telegram import Update
-from telegram_bot.config import TELEGRAM_BOT_TOKEN, TELEGRAM_USER_ID
-from telegram_bot.redis_store import RedisStore
+from telegram_bot.config import (
+    TELEGRAM_BOT_TOKEN, TELEGRAM_USER_ID,
+    REDIS_HOST, REDIS_CONTAINER_PORT, REDIS_ADMIN_USER, REDIS_ADMIN_PASSWORD
+)
+from redis import Redis
 
 class TelegramBot:
-    def __init__(self, token: str = TELEGRAM_BOT_TOKEN):
-        print(f'Token: {token}')
-        self.store = RedisStore()
-        self.token = token
-        self.key_forced_phrases = 'forced_phrases'
-        self.app : Application = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
+    def __init__(self, redis_db_number: int = 0):
+        print(f'Token: {TELEGRAM_BOT_TOKEN}')
+        self.store = Redis(
+                host=REDIS_HOST,
+                port=REDIS_CONTAINER_PORT,
+                username=REDIS_ADMIN_USER,
+                password=REDIS_ADMIN_PASSWORD,
+                decode_responses=True,
+                db=redis_db_number
+            )
+        self.token = TELEGRAM_BOT_TOKEN
+        self.app : Application = ApplicationBuilder().token(self.token).build()
         self._register_handlers()
 
     def _register_handlers(self):
