@@ -1,7 +1,7 @@
 FROM python:3.13-slim
 
 # Instala cron y dos2unix, elimina exim4
-RUN apt-get update && apt-get install -y cron dos2unix --no-install-recommends &&\
+RUN apt-get update && apt-get install -y cron dos2unix git --no-install-recommends &&\
     apt-get remove -y exim4 exim4-base && \
     apt-get clean && apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
