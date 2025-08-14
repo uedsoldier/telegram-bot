@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y cron dos2unix git --no-install-recommen
     rm -rf /var/lib/apt/lists/*
 
 # Establece directorio de trabajo
-WORKDIR /app
+WORKDIR /Twitter-bot/telegram-bot
 
 # Copia requirements y los instala
 COPY requirements.txt .
@@ -17,11 +17,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Convierte todos los archivos en /app a formato UNIX
-RUN find /app -type f -exec dos2unix {} \;
+RUN find . -type f -exec dos2unix {} \;
 
 # Healthcheck docker
 # HEALTHCHECK --interval=240m --timeout=10s --start-period=5s --retries=3 \
-#   CMD python3 /app/src/telegtam_healthcheck.py || exit 1
+#   CMD python3 /Twitter-bot/telegram-bot/src/telegtam_healthcheck.py || exit 1
 
 # Corre script
-CMD ["python3", "src/main.py"]
+CMD ["python3", "/Twitter-bot/telegram-bot/src/main.py"]
